@@ -1,0 +1,19 @@
+#!/bin/sh
+if [[ -d build ]]; then
+	rm -rf build
+fi
+mkdir build
+cd build
+
+cmake -DCMAKE_TOOLCHAIN_FILE=/var/tmp/android-cmake/android.toolchain.cmake    \
+      -DANDROID_NDK=/Users/sunsheng/dev/android-ndk-r10e/                      \
+      -DCMAKE_BUILD_TYPE=Release                                               \
+      -DANDROID_ABI="armeabi-v7a with NEON"                                    \
+      -DANDROID_NATIVE_API_LEVEL=16                                            \
+      ..
+# cmake --build .
+make
+adb shell rm /data/local/tmp/main
+adb push main /data/local/tmp/main
+adb shell /data/local/tmp/main
+cd ..
